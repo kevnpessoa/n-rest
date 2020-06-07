@@ -4,6 +4,7 @@ namespace Napps\Rest\ORM;
 
 use Napps\Rest\ORM\Drivers\DriverStrategy;
 use Napps\Rest\ORM\Drivers\PgsqlPdo;
+use PDO;
 
 abstract class Model
 {
@@ -13,7 +14,11 @@ abstract class Model
 
     public function __construct()
     {
-        $pdo = new \PDO("pgsql:host=localhost;dbname=teste_orm", "postgres", "1q2w3e4r");
+        $host = "localhost";
+        $dbname = "teste_orm";
+        $user = "postgres";
+        $pwd = "1q2w3e4r";
+        $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $pwd);
         $driver = new PgsqlPdo($pdo);
         $this->setDriver($driver);
     }
