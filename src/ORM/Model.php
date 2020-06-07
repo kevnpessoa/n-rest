@@ -2,13 +2,21 @@
 
 namespace Napps\Rest\ORM;
 
-use Napps\ORM\Drivers\DriverStrategy;
+use Napps\Rest\ORM\Drivers\DriverStrategy;
+use Napps\Rest\ORM\Drivers\PgsqlPdo;
 
 abstract class Model
 {
     protected $driver;
 
     public $id;
+
+    public function __construct()
+    {
+        $pdo = new \PDO("pgsql:host=localhost;dbname=teste_orm", "postgres", "1q2w3e4r");
+        $driver = new PgsqlPdo($pdo);
+        $this->setDriver($driver);
+    }
 
     public function setDriver(DriverStrategy $driver)
     {
@@ -57,6 +65,7 @@ abstract class Model
         if ($variable === "table") {
             $table = get_class($this);
             $table = explode("\\", $table);
+            $table = preg_replace('/Model/', '', $table);
             return strtolower(array_pop($table));
         }
         return null;

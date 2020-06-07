@@ -13,7 +13,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Napps\\Rest\\": "src"
+            "Napps\\Rest\\": "src",
+            "App\\": "app"
         }
     },
     "require-dev": {

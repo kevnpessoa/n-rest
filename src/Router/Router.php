@@ -11,8 +11,8 @@ class Router
     public function __construct(string $path, string $method)
     {
         $this->collection = new RouterCollection();
-        $this->path = $path; //$_SERVER['PATH_INFO'] ?? '/'; //$path;
-        $this->method = $method; //$_SERVER['REQUEST_METHOD'] ?? 'GET'; //$method;
+        $this->path = $path;
+        $this->method = $method;
     }
 
     public function get($path, $callback)
