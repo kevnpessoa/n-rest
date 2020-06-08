@@ -40,7 +40,7 @@ class Router
         $this->collection->add($method, $path, $callback);
     }
 
-    public function run()
+    public function run() : array
     {
         $callback = null;
         $result = [];
