@@ -55,6 +55,9 @@ class Router
             }
         }
 
+        $this->reindexResultParams($result);
+        $this->checkMethodParams($result);
+
         if (!$result['result']) {
             $callback = null;
         }
@@ -79,5 +82,39 @@ class Router
         $result = preg_match('/^' . $regex . '$/', $subject, $params);
 
         return compact('result', 'params');
+    }
+
+    public function checkMethodParams(array &$result)
+    {
+        if ($this->method === "GET") {
+            foreach ($_GET as $key => $value) {
+                $result['params'][$key] = $value;
+            }
+        }
+
+        if ($this->method === "POST") {
+            foreach ($_POST as $key => $value) {
+                $result['params'][$key] = $value;
+            }
+        }
+
+        if (in_array($this->method, ["PUT", "DELETE"])) {
+            parse_str(file_get_contents("php://input"),$put);
+            foreach ($put as $key => $value) {
+                $result['params'][$key] = $value;
+            }
+        }
+    }
+
+    public function reindexResultParams(array &$result)
+    {
+        $params = $result['params'];
+        $result['params'] = [];
+        $result['params']['functionUrl'] = $params[0];
+        array_shift($params);
+
+        for ($i = 0; $i < count($params); $i++) {
+            $result['params']['param' . ($i + 1)] = $params[$i];
+        }
     }
 }

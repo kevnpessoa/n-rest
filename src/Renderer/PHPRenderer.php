@@ -18,7 +18,7 @@ class PHPRenderer implements PHPRendererInterface
             echo $this->data;
             exit;
         }
-        if (is_array($this->data)) {
+        if (is_array($this->data) || is_object($this->data)) {
             header('Content-type:application/json');
             echo json_encode($this->data);
             exit;

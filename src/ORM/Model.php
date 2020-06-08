@@ -14,10 +14,10 @@ abstract class Model
 
     public function __construct()
     {
-        $host = "localhost";
-        $dbname = "teste_orm";
-        $user = "postgres";
-        $pwd = "1q2w3e4r";
+        $host = DB_SERVER;
+        $dbname = DB_NAME;
+        $user = DB_USERNAME;
+        $pwd = DB_PASSWORD;
         $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $user, $pwd);
         $driver = new PgsqlPdo($pdo);
         $this->setDriver($driver);
@@ -37,9 +37,25 @@ abstract class Model
 
     public function save()
     {
-        $this->getDriver()
+        $data = $this->getDriver()
             ->save($this)
-            ->exec();
+            ->exec()
+            ->one();
+
+        if (empty($this->id)) {
+            $this->id = $data['id'];
+        }
+    }
+
+    public function find()
+    {
+        $data = $this->findOne($this->id);
+
+        foreach ($data as $key => $value) {
+            $this->{$key} = $value;
+        }
+
+        return $data;
     }
 
     public function findAll(array $conditions = [])

@@ -34,7 +34,7 @@ class PgsqlPdo implements DriverStrategy
 
     public function insert(Model $data)
     {
-        $query = 'INSERT INTO %s (%s) VALUES (%s)';
+        $query = 'INSERT INTO %s (%s) VALUES (%s) RETURNING *';
         $this->prepareSql($query, $data)->bindParams($data);
 
         return $this;
@@ -45,7 +45,7 @@ class PgsqlPdo implements DriverStrategy
         if (empty($data->id)) {
             throw new \Exception("Id is required");
         }
-        $query = 'UPDATE %s SET (%s) = (%s) WHERE id=:id';
+        $query = 'UPDATE %s SET (%s) = (%s) WHERE id=:id RETURNING *';
         $this->prepareSql($query, $data);
         $this->bindParams($data);
         $this->stm->bindValue(':id', $data->id);
@@ -74,11 +74,8 @@ class PgsqlPdo implements DriverStrategy
         //$query = 'SELECT * FROM ' . $this->table;
 
         if ($conditions) {
-            $where = $this->prepareWhereSql($conditions);
-
-            $query .= ' WHERE ' . $where;
+            $query .= ' WHERE ' . $this->prepareWhereSql($conditions);
         }
-        var_dump($query);
         $this->prepareSql($query, $conditions)->bindParams($conditions);
         $this->colsNotBind = $colsNotBind;
 
@@ -149,6 +146,6 @@ class PgsqlPdo implements DriverStrategy
             }
         }
 
-        return implode(',', $fields);
+        return implode(' and ', $fields);
     }
 }

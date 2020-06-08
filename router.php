@@ -1,10 +1,35 @@
 <?php
 
-$app->get('/test/{name}', function($params) {
+$app->get('/user/{id}', function($params) {
     $ctrl = new App\Controller\UserController();
-    $ctrl->model->nome = $params[1];
-    $ctrl->model->email = "email de $params[1]";
+
+    return $ctrl->findOne($params['param1']);
+});
+
+$app->get('/user', function($params) {
+    $ctrl = new App\Controller\UserController();
+
+    return $ctrl->findAll($params);
+});
+
+$app->post('/user', function($params) {
+    $ctrl = new App\Controller\UserController($params);
     $ctrl->save();
 
-    return $params[1];
+    return $ctrl->model;
+});
+
+$app->put('/user', function($params) {
+    $ctrl = new App\Controller\UserController($params);
+    $ctrl->find();
+    $ctrl->save();
+
+    return $ctrl->model;
+});
+
+$app->delete('/user', function($params) {
+    $ctrl = new App\Controller\UserController($params);
+    $ctrl->delete();
+
+    return $ctrl->model;
 });
