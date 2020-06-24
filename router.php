@@ -33,4 +33,3 @@ $app->delete('/user', function($params) {
 
     return $ctrl->model;
 });
-
